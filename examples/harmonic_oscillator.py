@@ -1,7 +1,6 @@
-# examples/harmonic_oscillator_example.py
-
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 from dmd.core import dmd
 from dmd.utils import reconstruct_dynamics, plot_dynamics
 
@@ -49,6 +48,36 @@ def plot_phase_portrait(data, title="Phase Portrait"):
     plt.title(title)
     plt.legend()
     plt.grid(True)
+    plt.show()
+
+def animate_dynamics(X, X_dmd, t_end):
+    """
+    Create an animation to show the original and reconstructed dynamics.
+
+    Parameters:
+    X, X_dmd (ndarray): Original and reconstructed data matrices.
+    t_end (float): End time for the data.
+    """
+    fig, ax = plt.subplots()
+    line1, = ax.plot([], [], 'r-', label='Original')
+    line2, = ax.plot([], [], 'b-', label='Reconstructed')
+
+    def init():
+        ax.set_xlim(np.min(X[0]), np.max(X[0]))
+        ax.set_ylim(np.min(X[1]), np.max(X[1]))
+        ax.set_xlabel('Position (q)')
+        ax.set_ylabel('Momentum (p)')
+        ax.set_title('Dynamics Animation')
+        ax.legend()
+        ax.grid(True)
+        return line1, line2
+
+    def update(frame):
+        line1.set_data(X[0, :frame], X[1, :frame])
+        line2.set_data(X_dmd[0, :frame], X_dmd[1, :frame])
+        return line1, line2
+
+    ani = FuncAnimation(fig, update, frames=np.linspace(0, X.shape[1], 200, dtype=int), init_func=init, blit=True, interval=50)
     plt.show()
 
 def main():

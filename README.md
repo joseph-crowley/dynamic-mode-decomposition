@@ -22,9 +22,11 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-To use DMD in your project, simply import the `dmd` function from the `core` module:
+To use DMD in your project, simply import the `dmd` function from the `core` module in your main.py script:
 
 ```python
+# ./main.py
+
 from dmd.core import dmd
 
 # Your data matrix X
@@ -32,6 +34,12 @@ from dmd.core import dmd
 
 # Applying DMD with a specified rank
 Phi, Lambda, b = dmd(X, rank=2)
+```
+
+Alternatively, you can copy one of the examples to main.py:
+
+```bash
+cp examples/harmonic_oscillator.py main.py
 ```
 
 ## Documentation
